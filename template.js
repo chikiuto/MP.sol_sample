@@ -67,13 +67,13 @@ async function Execute( params )
 	
 	console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - -');
 
-	let AllNFTs = await contract.getAllNFTs();
-	console.log(AllNFTs);
+// 	let AllNFTs = await contract.getAllNFTs();
+// 	console.log(AllNFTs);
 
 	console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - -');
 	
-	let myNFTs = await contract.getMyNFTs();
-	console.log(myNFTs);
+// 	let myNFTs = await contract.getMyNFTs();
+// 	console.log(myNFTs);
 	
 	console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - -');
 
