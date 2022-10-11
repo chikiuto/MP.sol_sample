@@ -6,6 +6,8 @@ require('dotenv').config();
 const fs = require( "fs" );
 var MP_ABI = require('./MPabi.js');
 
+// 参考【 https://docs.alchemy.com/docs/alchemy-quickstart-guide 】
+const { Network, Alchemy } = require("alchemy-sdk");
 
 // 参考【 https://docs.ethers.io/v5/getting-started/ 】
 const { ethers } = require("ethers"); // 追記
@@ -37,17 +39,19 @@ async function Execute( params )
 	const url = 'https://eth-goerli.g.alchemy.com/v2/O2_6ZL9WCZTXWkBQNVvIOJKdsf-OgFcv';
 	const ContractAddress = '0x2f8F7D0AaCeB1c5fF873864e3A0478403Ed566b2';
 	const Abi = MP_ABI;
+	// const provider = new ethers.providers.JsonRpcProvider(url);
+	
 
-	// If you don't specify a //url//, Ethers connects to the default 
-	// (i.e. ``http:/\/localhost:8545``)
-	const provider = new ethers.providers.JsonRpcProvider(url);
-
+	const apiKey = "O2_6ZL9WCZTXWkBQNVvIOJKdsf-OgFcv";
+	const provider = new ethers.providers.AlchemyProvider( "goerli", apiKey);
 	
 	// The provider also allows signing transactions to
 	// send ether and pay to change state within the blockchain.
 	// For this, we need the account signer...
 	const wallet = new ethers.Wallet( process.env.PRIVATE_KEY, provider );
-	const signer = wallet.provider.getSigner( wallet.address );
+	// const signer = wallet.provider.getSigner( wallet.address );
+	
+	const signer = wallet.connect( provider );
 	
 	const contract = new ethers.Contract(ContractAddress, Abi, signer);
 
