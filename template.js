@@ -6,6 +6,10 @@ require('dotenv').config();
 const fs = require( "fs" );
 var MP_ABI = require('./MPabi.js');
 
+const BigNumber = require( "bignumber.js" );
+
+
+
 // 参考【 https://docs.alchemy.com/docs/alchemy-quickstart-guide 】
 const { Network, Alchemy } = require("alchemy-sdk");
 
@@ -14,6 +18,9 @@ const { ethers } = require("ethers"); // 追記
 
 function main( argc, argv )
 {
+	console.log(argc);
+	console.log(argv);
+
 	const params = {
 		root: path.dirname( __dirname ),
 	};
@@ -49,35 +56,43 @@ async function Execute( params )
 	// send ether and pay to change state within the blockchain.
 	// For this, we need the account signer...
 	const wallet = new ethers.Wallet( process.env.PRIVATE_KEY, provider );
-	// const signer = wallet.provider.getSigner( wallet.address );
-	
-	const signer = wallet.connect( provider );
-	
-	const contract = new ethers.Contract(ContractAddress, Abi, signer);
 
-	// let listPrice = await contract.updateListPrice( ethers.utils.parseEther( "0.001" ) );
-	let listPrice = await contract.getListPrice();
-	await console.log(listPrice);
-	await console.log(listPrice.toString());
+	
+	const contract = new ethers.Contract(ContractAddress, Abi, wallet);
+
+	// let listPrice = await contract.updateListPrice( ethers.utils.parseEther( "0.0035" ) );
+	// await console.log( listPrice  );
+	// await console.log( contract.getListPrice() );
+
+	// await console.log(listPrice.toString());
 	//formatEtherはStringで返す
-	await console.log( ethers.utils.formatEther( listPrice ) );
+	// await console.log( ethers.utils.formatEther( listPrice ) );
 	console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - -');
 	
-	// console.log( await contract.createToken("https://www.niigata-u.ac.jp/", 2, {value: ethers.utils.parseEther( "0.001" )}));
-	
-	console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - -');
-
-// 	let AllNFTs = await contract.getAllNFTs();
-// 	console.log(AllNFTs);
-
-	console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - -');
-	
-// 	let myNFTs = await contract.getMyNFTs();
-// 	console.log(myNFTs);
+	// console.log( await contract.createToken(
+	// 		"https://hitomebore.agritech-niigata-univ.club/?svg=0ed3ad0caefda33f042e4e2e0b86645b368d1c45b12373b43ee4e70c1ac5bd80", 
+	// 		ethers.utils.parseEther ( "0.003" ),
+	// 		{value: ethers.utils.parseEther( "0.0035" )}
+	// 		)
+	// 	);
 	
 	console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - -');
 
-	// let Sale = await contract.executeSale( 6, {value: ethers.utils.parseEther( "0.001" )} );
+	// let AllNFTs = await contract.getAllNFTs();
+	// console.log(AllNFTs);
+
+	console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - -');
+	
+	// let myNFTs = await contract.getMyNFTs();
+	// console.log(myNFTs);
+	
+	console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - -');
+
+	// let a = new BigNumber( 0x02 )
+
+	// console.log( await contract.executeSale( 0x13, {value: ethers.utils.parseEther( "0.003" )} ));
+	// console.log( await contract.executeSale( 0x12, {value: 2000000000000000	} ));
+
 
 }
 
