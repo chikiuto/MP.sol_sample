@@ -88,10 +88,8 @@ async function Execute( params )
 	
 	console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - -');
 
-	// let a = new BigNumber( 0x02 )
 
 	// console.log( await contract.executeSale( 0x13, {value: ethers.utils.parseEther( "0.003" )} ));
-	// console.log( await contract.executeSale( 0x12, {value: 2000000000000000	} ));
 
 
 }
