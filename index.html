@@ -43,17 +43,20 @@
 				// let listPrice = await contract.updateListPrice( ethers.utils.parseEther( "0.001" ) );
 				let listPrice = await contract.getListPrice();
 				await console.log(listPrice);
-				await console.log(listPrice.toString());
+				// await console.log(listPrice.toString());
 				//formatEtherはStringで返す
 				await console.log( ethers.utils.formatEther( listPrice ) );
 				
-				// let create = await contract.createToken("https://www.niigata-u.ac.jp/", 2, {value: ethers.utils.parseEther( "0.001" )});
+				await contract.createToken("https://www.niigata-u.ac.jp/", 4, {value: ethers.utils.parseEther( "0.001" )});
 
-				let allNFTs = await contract.getAllNFTs();
-				console.log(allNFTs);
+				// let latestNFT = await contract.getLatestIdToListedToken();
+				// console.log(latestNFT);
+
+				// let allNFTs = await contract.getAllNFTs();
+				// console.log(allNFTs);
 		
-				let myNFTs = await contract.getMyNFTs();
-				console.log(myNFTs);
+				// let myNFTs = await contract.getMyNFTs();
+				// console.log(myNFTs);
 		
 				// let sale = await contract.executeSale( 1, {value: ethers.utils.parseEther( "4" )} );
 				};

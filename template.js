@@ -16,8 +16,8 @@ const { argv } = require("process");
 
 function main( argc, argv )
 {
-	console.log(argc);
-	console.log(argv);
+	console.log( "argc is ..." + argc);
+	console.log( "argv is ..." + argv );
 
 	const params = {
 		root: path.dirname( __dirname ),
@@ -58,111 +58,66 @@ async function Execute( params )
 	// ファイル保存先
 	// "https://hitomebore.agritech-niigata-univ.club/?svg=0ed3ad0caefda33f042e4e2e0b86645b368d1c45b12373b43ee4e70c1ac5bd80"
 
-	console.log(' - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
-
 	if ( argv[2] == 'getLatestIdToListedToken' ) {
 		let latestId = await contract.getLatestIdToListedToken();
-		console.log( latestId.toString() );
+		process.stdout.write( latestId.toString() );
 	}
-
-	console.log(' - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
 
 	if ( argv[2] == 'getCurrentToken' ) {
 		let currentToken = await contract.getCurrentToken();
-		console.log( currentToken.toString() );
+		process.stdout.write( currentToken.toString() );
 	}
-	
-	console.log(' - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
-	
+		
 	if ( argv[2] == 'getListedTokenForId' ) {
+		// arg[3] の tokenId は文字列で bigNumber 型
 		let tokenDetail = await contract.getListedTokenForId( argv[3] );
-		console.log( await tokenDetail );
-		
-		
-		var key = Object.keys( tokenDetail );
-		console.log( key );
-		
-		console.log( JSON.stringify( tokenDetail ) );
-		
-		var result = tokenDetail.filter(function( item ) {
-			return item === '0' || '1' || '2' || '3' || '4' ;
-			// return item === 'tokenId' || 'owner' || 'seller' || 'price' || 'currentlyListed' ;
-		});
-
-		// var result = tokenDetail.splice(0, 4);
-
+		process.stdout.write( JSON.stringify( tokenDetail ) );
 	}
-
-	console.log(' - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
 	
 	if ( argv[2] == 'getAllNFTs' ) {
-		let AllNFTs = await contract.getAllNFTs();
-		
-		for (let i=0; i<AllNFTs.length; i++) {
-			process.stdout.write( JSON.stringify( AllNFTs[i] ) );
-		}
-		
-		// console.log( AllNFTs[0].owner )
-		// var key = Object.keys( AllNFTs );
-		// console.log( key );
-		
-		// console.log( AllNFTs[0][0] );
-		// console.log( AllNFTs[0].owner );
-		// console.log( isType( AllNFTs[0].owner ) );
-		
-		// console.log( JSON.stringify( AllNFTs ) );
-		process.stdout.write( JSON.stringify( AllNFTs ) );
-
+		let allNFTs = await contract.getAllNFTs();
+		process.stdout.write( JSON.stringify( allNFTs ) );
 	}
-
-	console.log(' - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
 	
 	if ( argv[2] == 'getMyNFTs' ) {
 		let myNFTs = await contract.getMyNFTs();
-		console.log(myNFTs);
+		process.stdout.write( JSON.stringify( myNFTs ) );
 	}
-
-	console.log(' - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
 
 	if ( argv[2] == 'updateListPrice' ) {
 		// parseEtherはEtherをweiに変換（戻り値は Bignumber）
-		let newListPrice = await contract.updateListPrice( ethers.utils.parseEther( "0.0035" ) );
-		await console.log( newListPrice );
-		
-		process.stdout.write( newListPrice.toString() );
+		let newListPrice = await contract.updateListPrice( ethers.utils.parseEther( argv[3] ) );
+		// let newListPrice = await contract.updateListPrice( ethers.utils.parseEther( "0.0035" ) );
+		process.stdout.write( JSON.stringify( newListPrice ) );
 	}
-
-	console.log(' - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
   
 	if ( argv[2] == 'getListPrice' ) {
 		// listPrice の型は Bignumber
 		// 1 ETH = 1 wei x 10^18
-		let ListPrice = await contract.getListPrice();
-		// Bignumber　オブジェクトが返ってくる
-		await console.log( ListPrice );
-		// toString だと単位は wei
-		await console.log( ListPrice.toString() + ' wei' );
-		// formatEtherは wei を Ether に変換（戻り値は String）
-		await console.log( ethers.utils.formatEther( ListPrice ) + ' ether' );
+		let listPrice = await contract.getListPrice();
 
-		process.stdout.write( ethers.utils.formatEther( ListPrice ) + ' ether' );
+		// Bignumber　オブジェクトが返ってくる
+		await console.log( listPrice );
+		// toString だと単位は wei
+		await console.log( 'toString result : ' + listPrice.toString() + ' wei' );
+		// formatEtherは wei を Ether に変換（戻り値は String）
+		await console.log( 'formatEther result : ' + ethers.utils.formatEther( listPrice ) + ' ether' );
+
+		process.stdout.write( ethers.utils.formatEther( listPrice ) + ' ether' );
 	}
-	
-	console.log(' - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
-	
+		
 	if ( argv[2] == 'createToken' ) {
 		// ListPrice 取得
-		let ListPrice = await contract.getListPrice();
-		
+		let listPrice = await contract.getListPrice();
 		const result = await contract.createToken(
 			argv[3],
 			ethers.utils.parseEther ( argv[4] ),
 			// formatEther で 単位が ether の String にしてから、parseEther で weiにする
-			{value: ethers.utils.parseEther( ethers.utils.formatEther( ListPrice ) )}
+			{value: ethers.utils.parseEther( ethers.utils.formatEther( listPrice ) )}
 			);
-			
 		process.stdout.write( JSON.stringify(result) );
 
+		// 引数のお手本
 		// console.log( await contract.createToken(
 		// 	"https://hitomebore.agritech-niigata-univ.club/?svg=0ed3ad0caefda33f042e4e2e0b86645b368d1c45b12373b43ee4e70c1ac5bd80", 
 		// 	ethers.utils.parseEther ( "0.003" ),
@@ -170,14 +125,13 @@ async function Execute( params )
 		// 	)
 		// );
 	}
-
-	console.log(' - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
 	
 	if ( argv[2] == 'executeSale' ) {
-	console.log( await contract.executeSale( argv[3], {value: ethers.utils.parseEther( argv[4] )} ));
-	// console.log( await contract.executeSale( 0x14, {value: ethers.utils.parseEther( "0.003" )} ));
-	}
+		let executeSale = await contract.executeSale( argv[3], {value: ethers.utils.parseEther( argv[4] )} );
+		// console.log( await contract.executeSale( 0x14, {value: ethers.utils.parseEther( "0.003" )} ));
 
+		console.log( executeSale );
+	}
 }
 
 
