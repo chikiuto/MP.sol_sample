@@ -53,7 +53,7 @@ async function Execute( params )
 	// send ether and pay to change state within the blockchain.
 	// For this, we need the account signer...
 	const wallet = new ethers.Wallet( process.env.PRIVATE_KEY, provider );
-	const contract = new ethers.Contract(ContractAddress, Abi, wallet);
+	const contract = new ethers.Contract( ContractAddress, Abi, wallet );
   
 	// ファイル保存先
 	// "https://hitomebore.agritech-niigata-univ.club/?svg=0ed3ad0caefda33f042e4e2e0b86645b368d1c45b12373b43ee4e70c1ac5bd80"
@@ -63,35 +63,35 @@ async function Execute( params )
 		process.stdout.write( latestId.toString() );
 	}
 
-	if ( argv[2] == 'getCurrentToken' ) {
+	else if ( argv[2] == 'getCurrentToken' ) {
 		let currentToken = await contract.getCurrentToken();
 		process.stdout.write( currentToken.toString() );
 	}
 		
-	if ( argv[2] == 'getListedTokenForId' ) {
+	else if ( argv[2] == 'getListedTokenForId' ) {
 		// arg[3] の tokenId は文字列で bigNumber 型
 		let tokenDetail = await contract.getListedTokenForId( argv[3] );
 		process.stdout.write( JSON.stringify( tokenDetail ) );
 	}
 	
-	if ( argv[2] == 'getAllNFTs' ) {
+	else if ( argv[2] == 'getAllNFTs' ) {
 		let allNFTs = await contract.getAllNFTs();
 		process.stdout.write( JSON.stringify( allNFTs ) );
 	}
 	
-	if ( argv[2] == 'getMyNFTs' ) {
+	else if ( argv[2] == 'getMyNFTs' ) {
 		let myNFTs = await contract.getMyNFTs();
 		process.stdout.write( JSON.stringify( myNFTs ) );
 	}
 
-	if ( argv[2] == 'updateListPrice' ) {
+	else if ( argv[2] == 'updateListPrice' ) {
 		// parseEtherはEtherをweiに変換（戻り値は Bignumber）
 		let newListPrice = await contract.updateListPrice( ethers.utils.parseEther( argv[3] ) );
 		// let newListPrice = await contract.updateListPrice( ethers.utils.parseEther( "0.0035" ) );
 		process.stdout.write( JSON.stringify( newListPrice ) );
 	}
   
-	if ( argv[2] == 'getListPrice' ) {
+	else if ( argv[2] == 'getListPrice' ) {
 		// listPrice の型は Bignumber
 		// 1 ETH = 1 wei x 10^18
 		let listPrice = await contract.getListPrice();
@@ -106,14 +106,14 @@ async function Execute( params )
 		process.stdout.write( ethers.utils.formatEther( listPrice ) + ' ether' );
 	}
 		
-	if ( argv[2] == 'createToken' ) {
+	else if ( argv[2] == 'createToken' ) {
 		// ListPrice 取得
 		let listPrice = await contract.getListPrice();
 		const result = await contract.createToken(
-			argv[3],
-			ethers.utils.parseEther ( argv[4] ),
+			argv[3], // tokenURI
+			ethers.utils.parseEther ( argv[4] ), // price
 			// formatEther で 単位が ether の String にしてから、parseEther で weiにする
-			{value: ethers.utils.parseEther( ethers.utils.formatEther( listPrice ) )}
+			{value: ethers.utils.parseEther( ethers.utils.formatEther( listPrice ) )} // listPlice
 			);
 		process.stdout.write( JSON.stringify(result) );
 
@@ -126,11 +126,22 @@ async function Execute( params )
 		// );
 	}
 	
-	if ( argv[2] == 'executeSale' ) {
-		let executeSale = await contract.executeSale( argv[3], {value: ethers.utils.parseEther( argv[4] )} );
-		// console.log( await contract.executeSale( 0x14, {value: ethers.utils.parseEther( "0.003" )} ));
+	else if ( argv[2] == 'executeSale' ) {
+		let executeSale = await contract.executeSale(
+			argv[3], // tokenID
+			{value: ethers.utils.parseEther( argv[4] )} // price
+		);
+
+		// 引数のお手本
+		// console.log( await contract.executeSale(
+		//     0x14, {value: ethers.utils.parseEther( "0.003" )} )
+		// );
 
 		console.log( executeSale );
+	}
+	else 
+	{
+		process.stdout.write( `There is no command "${argv[2]}"` );
 	}
 }
 
