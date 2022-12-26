@@ -127,20 +127,19 @@ async function Execute( params )
 	}
 	
 	else if ( argv[2] == 'executeSale' ) {
-		let executeSale = await contract.executeSale(
+		let result = await contract.executeSale(
 			argv[3], // tokenID
 			{value: ethers.utils.parseEther( argv[4] )} // price
 		);
+		process.stdout.write( JSON.stringify(result) );
 
 		// 引数のお手本
 		// console.log( await contract.executeSale(
 		//     0x14, {value: ethers.utils.parseEther( "0.003" )} )
 		// );
-
-		console.log( executeSale );
 	}
-	else 
-	{
+
+	else {
 		process.stdout.write( `There is no command "${argv[2]}"` );
 	}
 }
