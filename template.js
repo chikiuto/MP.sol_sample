@@ -56,7 +56,7 @@ async function Execute( params )
 	const contract = new ethers.Contract( ContractAddress, Abi, wallet );
   
 	// ファイル保存先
-	// "https://hitomebore.agritech-niigata-univ.club/?svg=0ed3ad0caefda33f042e4e2e0b86645b368d1c45b12373b43ee4e70c1ac5bd80"
+	// "https://test=0ed3ad0caefda33f042e4e2e0b86645b368d1c45b12373b43ee4e70c1ac5bd80"
 
 	if ( argv[2] == 'getLatestIdToListedToken' ) {
 		let latestId = await contract.getLatestIdToListedToken();
@@ -119,7 +119,7 @@ async function Execute( params )
 
 		// 引数のお手本
 		// console.log( await contract.createToken(
-		// 	"https://hitomebore.agritech-niigata-univ.club/?svg=0ed3ad0caefda33f042e4e2e0b86645b368d1c45b12373b43ee4e70c1ac5bd80", 
+		// 	"https://test=0ed3ad0caefda33f042e4e2e0b86645b368d1c45b12373b43ee4e70c1ac5bd80", 
 		// 	ethers.utils.parseEther ( "0.003" ),
 		// 	{value: ethers.utils.parseEther( "0.0035" )}
 		// 	)
